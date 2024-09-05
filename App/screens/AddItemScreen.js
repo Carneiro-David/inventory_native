@@ -5,10 +5,10 @@ import { ItemsContext } from '../ItemsContext';
 const AddItemScreen = ({ navigation }) => {
   const { addItem } = useContext(ItemsContext); 
   const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState(''); 
-  const [type, setType] = useState(''); 
+  const [quantity, setQuantity] = useState('');
+  const [type, setType] = useState('');
   const [price, setPrice] = useState(''); 
-  const [description, setDescription] = useState(''); 
+  const [description, setDescription] = useState('');
 
   const handleAddItem = () => {
     const newItem = {
@@ -16,7 +16,7 @@ const AddItemScreen = ({ navigation }) => {
       name,
       quantity: parseInt(quantity),
       type,
-      price: parseFloat(price), 
+      price: parseFloat(price),
       description,
       image: 'https://via.placeholder.com/150', 
     };

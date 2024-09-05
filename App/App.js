@@ -5,6 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import AddItemScreen from './screens/AddItemScreen';
 import DetailItem from './screens/DetailItem';
 import EditItemScreen from './screens/EditItemScreen';
+import CalendarScreen from './screens/CalendarScreen';
 import { ItemsProvider } from './ItemsContext';
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ const App = () => {
           <Stack.Screen name="AddItem" component={AddItemScreen} options={{ title: 'Ajouter un item' }} />
           <Stack.Screen name="DetailItem" component={DetailItem} options={{ title: 'Détails de l\'item' }} />
           <Stack.Screen name="EditItem" component={EditItemScreen} options={{ title: 'Modifier l\'item' }} />
+          <Stack.Screen name="Calendar" component={CalendarScreen} options={{ title: 'Calendrier' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </ItemsProvider>
