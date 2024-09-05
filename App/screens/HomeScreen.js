@@ -12,7 +12,7 @@ import { ItemsContext } from "../ItemsContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Animated, Pressable } from "react-native";
 
-const ItemItem = ({ item, onPress }) => {
+const Item = ({ item, onPress }) => {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
@@ -35,12 +35,14 @@ const ItemItem = ({ item, onPress }) => {
       onPressOut={handlePressOut}
       onPress={onPress}
     >
-      <Animated.View style={[styles.itemItem, { transform: [{ scale }] }]}>
+      <Animated.View style={[styles.Item, { transform: [{ scale }] }]}>
         <Image source={{ uri: item.cover }} style={styles.coverImage} />
         <View style={styles.itemInfo}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.author}>Auteur: {item.author}</Text>
-          <Text style={styles.year}>Année: {item.year}</Text>
+          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.quantity}>Quantité: {item.quantity}</Text>
+          <Text style={styles.type}>Type: {item.type}</Text>
+          <Text style={styles.price}>Prix: {item.price} €</Text>
+          <Text style={styles.description}>{item.description}</Text>
         </View>
         <Ionicons name="chevron-forward" size={24} color="#888" />
       </Animated.View>
@@ -57,15 +59,14 @@ const HomeScreen = ({ navigation }) => {
         data={items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ItemItem
+          <Item
             item={item}
             onPress={() => navigation.navigate("DetailItem", { item: item })}
           />
         )}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddItem')}>
-        <Ionicons name="add-circle" size={28} color="white" />
-        <Text style={styles.addButtonText}>Ajouter un item</Text>
+        <Ionicons name="add-outline" size={28} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#f8f9fa",
   },
-  itemItem: {
+  Item: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
@@ -119,7 +120,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#007bff",
-    paddingVertical: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     borderRadius: 25,
     marginTop: 20,
     shadowColor: "#000",
@@ -127,6 +129,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
+    position: "absolute",
+    bottom: 20,
+    right: 20,
   },
   addButtonText: {
     color: "white",

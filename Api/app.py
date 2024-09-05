@@ -7,16 +7,47 @@ CORS(app)
 items = [
     {
         "id": "1",
-        "title": "Python Programming",
-        "author": "Alice Johnson",
-        "year": 2022,
+        "name": "Jambon de paris",
+        "quantity": "100",
+        "type": "viande",
+        "price": "10",
+        "description": "Jambon de paris pur boeuf",
         "cover": "https://via.placeholder.com/150"
     },
     {
         "id": "2",
-        "title": "Data Science",
-        "author": "Bob Smith",
-        "year": 2023,
+        "name": "Fromage",
+        "quantity": "50",
+        "type": "laitier",
+        "price": "5",
+        "description": "Fromage à pâte dure",
+        "cover": "https://via.placeholder.com/150"
+    },
+    {
+        "id": "3",
+        "name": "Pain",
+        "quantity": "200",
+        "type": "boulangerie",
+        "price": "2",
+        "description": "Pain frais",
+        "cover": "https://via.placeholder.com/150"
+    },
+    {
+        "id": "4",
+        "name": "Pommes",
+        "quantity": "80",
+        "type": "fruits",
+        "price": "3",
+        "description": "Pommes fraîches",
+        "cover": "https://via.placeholder.com/150"
+    },
+    {
+        "id": "5",
+        "name": "Yaourt",
+        "quantity": "30",
+        "type": "laitier",
+        "price": "1.5",
+        "description": "Yaourt nature",
         "cover": "https://via.placeholder.com/150"
     }
 ]
