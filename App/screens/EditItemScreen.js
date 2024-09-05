@@ -6,7 +6,7 @@ const EditItemScreen = ({ route, navigation }) => {
   const { item } = route.params;
   const { items, setItems } = useContext(ItemsContext);
 
-  const [n ame, setName] = useState(item.name);
+  const [name, setName] = useState(item.name);
   const [quantity, setQuantity] = useState(item.quantity.toString());
   const [type, setType] = useState(item.type);
   const [price, setPrice] = useState(item.price.toString());
@@ -33,7 +33,7 @@ const EditItemScreen = ({ route, navigation }) => {
       <TextInput style={styles.input} value={description} onChangeText={setDescription} />
 
       <Text style={styles.label}>Prix unité:</Text>
-      <TextInput style={styles.input} value={price} onChangeText={setPrice} />
+      <TextInput style={styles.input} value={price} onChangeText={setPrice} keyboardType="numeric" />
 
       <Button title="Sauvegarder les modifications" onPress={saveChanges} />
     </View>
