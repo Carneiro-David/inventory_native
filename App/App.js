@@ -57,7 +57,7 @@ function App() {
           />
           <Tab.Screen
             name="Planning"
-            component={AddItemScreen}
+            component={CalendarScreen}
             options={{
               tabBarLabel: "Planning",
               tabBarIcon: ({ color, size }) => (
