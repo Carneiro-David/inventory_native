@@ -2,19 +2,19 @@ import React from 'react';
 import { View, Text, Image, Button, StyleSheet } from 'react-native';
 
 const DetailLivre = ({ route, navigation }) => {
-  const { book } = route.params;
+  const { item } = route.params;
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: book.cover }} style={styles.coverImage} />
-      <Text style={styles.title}>{book.title}</Text>
-      <Text style={styles.author}>Auteur: {book.author}</Text>
-      <Text style={styles.year}>Année: {book.year}</Text>
-      <Text style={styles.description}>{book.description}</Text>
+      <Image source={{ uri: item.cover }} style={styles.coverImage} />
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.author}>Auteur: {item.author}</Text>
+      <Text style={styles.year}>Année: {item.year}</Text>
+      <Text style={styles.description}>{item.description}</Text>
 
       <Button
         title="Modifier le Livre"
-        onPress={() => navigation.navigate('EditBook', { book })}
+        onPress={() => navigation.navigate('EditBook', { item })}
       />
     </View>
   );
