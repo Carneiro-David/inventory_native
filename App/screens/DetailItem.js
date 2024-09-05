@@ -1,8 +1,31 @@
-import React from 'react';
-import { View, Text, Image, Button, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, Image, Button, StyleSheet, Alert } from 'react-native';
+import { ItemsContext } from '../ItemsContext'; 
 
 const DetailItem = ({ route, navigation }) => {
   const { item } = route.params;
+  const { deleteItem } = useContext(ItemsContext);
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Confirmer la suppression",
+      "Êtes-vous sûr de vouloir supprimer cet item ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel"
+        },
+        {
+          text: "Supprimer",
+          onPress: () => {
+            deleteItem(item.id);
+            navigation.goBack();
+          },
+          style: "destructive"
+        }
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -16,6 +39,12 @@ const DetailItem = ({ route, navigation }) => {
       <Button
         title="Modifier l'Item"
         onPress={() => navigation.navigate('EditItem', { item })}
+      />
+
+      <Button
+        title="Supprimer l'Item"
+        onPress={handleDelete}
+        color="red" // Optionnel, pour rendre le bouton rouge
       />
     </View>
   );
