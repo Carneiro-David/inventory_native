@@ -64,7 +64,6 @@ const HomeScreen = ({ navigation }) => {
         )}
       />
 
-      {/* Bouton pour accéder au calendrier */}
       <TouchableOpacity style={styles.calendarButton} onPress={() => navigation.navigate('Calendar')}>
         <Ionicons name="calendar" size={28} color="white" />
         <Text style={styles.calendarButtonText}>Voir le Calendrier</Text>

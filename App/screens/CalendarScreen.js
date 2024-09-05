@@ -1,15 +1,117 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { ItemsContext } from '../ItemsContext';
+import { Picker } from '@react-native-picker/picker';
 
 const CalendarScreen = () => {
+  const { items } = useContext(ItemsContext);
+
+  const [selectedItemId, setSelectedItemId] = useState('');
+  const [entreprise, setEntreprise] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [events, setEvents] = useState({});
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const handleAddEvent = () => {
+    if (!selectedItemId || !entreprise || !startDate || !endDate) {
+      Alert.alert('Erreur', 'Tous les champs doivent être remplis');
+      return;
+    }
+
+    const newEvent = {
+      idItem: selectedItemId,
+      entreprise,
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: endDate.toISOString().split('T')[0],
+    };
+
+    setEvents({
+      ...events,
+      [newEvent.startDate]: {
+        marked: true,
+        events: [...(events[newEvent.startDate]?.events || []), newEvent],
+      },
+      [newEvent.endDate]: {
+        marked: true,
+        events: [...(events[newEvent.endDate]?.events || []), newEvent],
+      },
+    });
+
+    setSelectedItemId('');
+    setEntreprise('');
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   return (
     <View style={styles.container}>
       <Calendar
-        onDayPress={(day) => {
-          console.log('Selected day', day);
-        }}
+        markedDates={Object.keys(events).reduce((acc, date) => {
+          acc[date] = { marked: true };
+          return acc;
+        }, {})}
       />
+
+      <Text style={styles.label}>Sélectionnez un item</Text>
+      <Picker
+        selectedValue={selectedItemId}
+        onValueChange={(itemValue) => setSelectedItemId(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Sélectionner un item" value="" />
+        {items.map((item) => (
+          <Picker.Item key={item.id} label={item.title} value={item.id} />
+        ))}
+      </Picker>
+
+      <TextInput
+        placeholder="Entreprise"
+        value={entreprise}
+        onChangeText={setEntreprise}
+        style={styles.input}
+      />
+
+      <View>
+        <Text style={styles.label}>Date de début</Text>
+        <Button title="Sélectionner la date de début" onPress={() => setShowStartDatePicker(true)} />
+        {startDate && <Text>Date sélectionnée : {startDate.toLocaleDateString()}</Text>}
+        {showStartDatePicker && (
+          <DateTimePicker
+            value={startDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={(event, date) => {
+              setShowStartDatePicker(false);
+              if (date) setStartDate(date);
+            }}
+          />
+        )}
+      </View>
+
+      <View>
+        <Text style={styles.label}>Date de fin</Text>
+        <Button title="Sélectionner la date de fin" onPress={() => setShowEndDatePicker(true)} />
+        {endDate && <Text>Date sélectionnée : {endDate.toLocaleDateString()}</Text>}
+        {showEndDatePicker && (
+          <DateTimePicker
+            value={endDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={(event, date) => {
+              setShowEndDatePicker(false);
+              if (date) setEndDate(date);
+            }}
+          />
+        )}
+      </View>
+
+      <View style={styles.addButtonContainer}>
+        <Button title="Ajouter l'événement" onPress={handleAddEvent} color="green" />
+      </View>
     </View>
   );
 };
@@ -17,7 +119,27 @@ const CalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
     padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    marginBottom: 20,
+  },
+  addButtonContainer: {
+    marginTop: 20,
   },
 });
 
