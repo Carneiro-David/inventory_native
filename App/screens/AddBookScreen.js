@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { BooksContext } from '../BooksContext'; // Import du contexte
+import { ItemsContext } from '../ItemsContext'; // Import du contexte
 
 const AddBookScreen = ({ navigation }) => {
-  const { addBook } = useContext(BooksContext); // Récupérer la fonction addBook du contexte
+  const { addBook } = useContext(ItemsContext); // Récupérer la fonction addBook du contexte
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [year, setYear] = useState('');

@@ -4,83 +4,81 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-books = [
+items = [
     {
-        "id": 1,
-        "title": "Le Petit Prince",
-        "author": "Antoine de Saint-Exupéry",
-        "year": 1943,
-        "description": "Un conte philosophique illustré...",
-        "cover_image": "https://example.com/lepetitprince.jpg",
+        "id": "1",
+        "title": "Python Programming",
+        "author": "Alice Johnson",
+        "year": 2022,
+        "cover": "https://via.placeholder.com/150"
     },
     {
-        "id": 2,
-        "title": "1984",
-        "author": "George Orwell",
-        "year": 1949,
-        "description": "Un roman dystopique...",
-        "cover_image": "https://example.com/1984.jpg",
-    },
+        "id": "2",
+        "title": "Data Science",
+        "author": "Bob Smith",
+        "year": 2023,
+        "cover": "https://via.placeholder.com/150"
+    }
 ]
 
 # Récupérer tous les livres
-@app.route("/books", methods=["GET"])
-def get_books():
-    return jsonify(books)
+@app.route("/items", methods=["GET"])
+def get_items():
+    return jsonify(items)
 
 
-# Récupérer un livre par ID
-@app.route("/books/<int:book_id>", methods=["GET"])
-def get_book(book_id):
-    book = next((book for book in books if book["id"] == book_id), None)
+# Récupérer un Item par ID
+@app.route("/items/<int:item_id>", methods=["GET"])
+def get_item(item_id):
+    item = next((item for item in items if item["id"] == item_id), None)
 
-    if book is None:
+    if item is None:
 
-        return jsonify({"message": "Livre non trouvé"}), 404
+        return jsonify({"message": "Item non trouvé"}), 404
 
-    return jsonify(book)
-
-
-# Créer un nouveau livre
-@app.route("/books", methods=["POST"])
-def add_book():
-    new_book = request.json
-    new_book["id"] = len(books) + 1
-    books.append(new_book)
-
-    return jsonify(new_book), 201
+    return jsonify(item)
 
 
-# Mettre à jour un livre
-@app.route("/books/<int:book_id>", methods=["PUT"])
-def update_book(book_id):
+# Créer un nouveau Item
+@app.route("/items", methods=["POST"])
+def add_item():
+    new_item = request.json
+    new_item["id"] = len(items) + 1
+    items.append(new_item)
 
-    book = next((book for book in books if book["id"] == book_id), None)
+    return jsonify(new_item), 201
 
-    if book is None:
 
-        return jsonify({"message": "Livre non trouvé"}), 404
+# Mettre à jour un Item
+@app.route("/items/<int:item_id>", methods=["PUT"])
+def update_item(item_id):
+
+    item = next((item for item in items if item["id"] == item_id), None)
+
+    if item is None:
+
+        return jsonify({"message": "Item non trouvé"}), 404
 
     updated_data = request.json
 
-    book.update(updated_data)
+    item.update(updated_data)
 
-    return jsonify(book)
+    return jsonify(item)
 
 
-# Supprimer un livre
-@app.route("/books/<int:book_id>", methods=["DELETE"])
-def delete_book(book_id):
+# Supprimer un Item
+@app.route("/items/<int:item_id>", methods=["DELETE"])
+def delete_item(item_id):
 
-    book = next((book for book in books if book["id"] == book_id), None)
+    item = next((item for item in items if item["id"] == item_id), None)
 
-    if book is None:
+    if item is None:
 
-        return jsonify({"message": "Livre non trouvé"}), 404
+        return jsonify({"message": "Item non trouvé"}), 404
 
-    books.remove(book)
+    items.remove(item)
 
-    return jsonify({"message": "Livre supprimé"})
+    return jsonify({"message": "Item supprimé"})
 
 
 if __name__ == "__main__":

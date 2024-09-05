@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { BooksContext } from '../BooksContext';
+import { ItemsContext } from '../ItemsContext';
 
 const EditBookScreen = ({ route, navigation }) => {
   const { book } = route.params;
-  const { books, setBooks } = useContext(BooksContext);
+  const { books, setBooks } = useContext(ItemsContext);
 
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
