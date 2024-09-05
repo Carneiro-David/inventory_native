@@ -13,7 +13,7 @@ const EditItemScreen = ({ route, navigation }) => {
   const [description, setDescription] = useState(item.description || '');
 
   const saveChanges = () => {
-    const updatedItems = item.map(i => (i.id === item.id ? { ...i, name, quantity: parseInt(quantity), type, description, price: parseInt(price) } : i));
+    const updatedItems = items.map(i => (i.id === item.id ? { ...i, name, quantity: parseInt(quantity), type, description, price: parseInt(price) } : i));
     setItems(updatedItems);
     navigation.navigate('Home');
   };
