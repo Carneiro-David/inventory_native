@@ -63,6 +63,12 @@ const HomeScreen = ({ navigation }) => {
           />
         )}
       />
+
+      <TouchableOpacity style={styles.calendarButton} onPress={() => navigation.navigate('Calendar')}>
+        <Ionicons name="calendar" size={28} color="white" />
+        <Text style={styles.calendarButtonText}>Voir le Calendrier</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddItem')}>
         <Ionicons name="add-circle" size={28} color="white" />
         <Text style={styles.addButtonText}>Ajouter un item</Text>
@@ -129,6 +135,26 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   addButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  calendarButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#28a745", // Vert pour le bouton de calendrier
+    paddingVertical: 12,
+    borderRadius: 25,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  calendarButtonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
