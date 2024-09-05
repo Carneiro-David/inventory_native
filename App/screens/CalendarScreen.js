@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,7 +9,7 @@ import moment from 'moment';
 const CalendarScreen = () => {
   const { items } = useContext(ItemsContext);
 
-  const [selectedItemId, setSelectedItemId] = useState('');
+  const [selectedItemId, setSelectedItemId] = useState(''); 
   const [entreprise, setEntreprise] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -18,7 +18,6 @@ const CalendarScreen = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  // Fonction pour obtenir toutes les dates entre la date de début et la date de fin
   const getDatesInRange = (start, end) => {
     let dates = {};
     let currentDate = moment(start);
@@ -37,7 +36,7 @@ const CalendarScreen = () => {
     return dates;
   };
 
-  const handleAddEvent = () => {
+  const handleAddEvent = async () => {
     if (!selectedItemId || !entreprise || !startDate || !endDate) {
       Alert.alert('Erreur', 'Tous les champs doivent être remplis');
       return;
@@ -46,32 +45,52 @@ const CalendarScreen = () => {
     const start = startDate.toISOString().split('T')[0];
     const end = endDate.toISOString().split('T')[0];
 
-    // Obtenir toutes les dates entre startDate et endDate et les ajouter aux événements
-    const newEvents = getDatesInRange(start, end);
+    const newEvent = {
+      itemId: selectedItemId,
+      entreprise: entreprise,
+      startDate: start,
+      endDate: end,
+    };
 
-    setEvents({
-      ...events,
-      ...newEvents, // Marquer toutes les dates entre start et end
-    });
+    try {
+      const response = await fetch('http://10.0.2.2:5000/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newEvent),
+      });
 
-    setSelectedItemId('');
-    setEntreprise('');
-    setStartDate(null);
-    setEndDate(null);
-    setSuccessMessage(true); // Affiche le message de validation
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi de l\'événement');
+      }
 
-    // Réinitialiser le calendrier et masquer le message après 15 secondes
-    setTimeout(() => {
-      setEvents({});
-      setSuccessMessage(false); // Masquer le message après 15 secondes
-    }, 15000);
+      const eventData = await response.json();
+
+      const newEvents = getDatesInRange(start, end);
+      setEvents({
+        ...events,
+        ...newEvents,
+      });
+
+      setSelectedItemId('');
+      setEntreprise('');
+      setStartDate(null);
+      setEndDate(null);
+      setSuccessMessage(true);
+
+      setTimeout(() => {
+        setEvents({});
+        setSuccessMessage(false);
+      }, 15000);
+    } catch (error) {
+      Alert.alert('Erreur', 'Impossible d\'ajouter l\'événement');
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Calendar
-        markedDates={events}
-      />
+      <Calendar markedDates={events} />
 
       {successMessage && (
         <View style={styles.successMessage}>
