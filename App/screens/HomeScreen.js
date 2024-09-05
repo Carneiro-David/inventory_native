@@ -59,13 +59,13 @@ const HomeScreen = ({ navigation }) => {
         renderItem={({ item }) => (
           <ItemItem
             item={item}
-            onPress={() => navigation.navigate("DetailLivre", { item: item })}
+            onPress={() => navigation.navigate("DetailItem", { item: item })}
           />
         )}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddItem')}>
         <Ionicons name="add-circle" size={28} color="white" />
-        <Text style={styles.addButtonText}>Ajouter un Livre</Text>
+        <Text style={styles.addButtonText}>Ajouter un item</Text>
       </TouchableOpacity>
     </View>
   );

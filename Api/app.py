@@ -21,7 +21,7 @@ items = [
     }
 ]
 
-# Récupérer tous les livres
+# Récupérer tous les items
 @app.route("/items", methods=["GET"])
 def get_items():
     return jsonify(items)

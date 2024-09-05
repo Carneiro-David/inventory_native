@@ -2,9 +2,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
-import AddBookScreen from './screens/AddBookScreen';
-import DetailLivre from './screens/DetailLivre';
-import EditBookScreen from './screens/EditBookScreen';
+import AddItemScreen from './screens/AddItemScreen';
+import DetailItem from './screens/DetailItem';
+import EditItemScreen from './screens/EditItemScreen';
 import { ItemsProvider } from './ItemsContext';
 
 const Stack = createStackNavigator();
@@ -14,10 +14,10 @@ const App = () => {
     <ItemsProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Accueil des Livres' }} />
-          <Stack.Screen name="AddBook" component={AddBookScreen} options={{ title: 'Ajouter un Livre' }} />
-          <Stack.Screen name="DetailLivre" component={DetailLivre} options={{ title: 'Détails du Livre' }} />
-          <Stack.Screen name="EditBook" component={EditBookScreen} options={{ title: 'Modifier le Livre' }} />
+          <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Accueil des item' }} />
+          <Stack.Screen name="AddItem" component={AddItemScreen} options={{ title: 'Ajouter un item' }} />
+          <Stack.Screen name="DetailItem" component={DetailItem} options={{ title: 'Détails de l\'item' }} />
+          <Stack.Screen name="EditItem" component={EditItemScreen} options={{ title: 'Modifier l\'item' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </ItemsProvider>
