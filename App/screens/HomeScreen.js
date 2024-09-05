@@ -8,11 +8,11 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { BooksContext } from "../BooksContext";
+import { ItemsContext } from "../ItemsContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Animated, Pressable } from "react-native";
 
-const BookItem = ({ book, onPress }) => {
+const ItemItem = ({ item, onPress }) => {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
@@ -35,12 +35,12 @@ const BookItem = ({ book, onPress }) => {
       onPressOut={handlePressOut}
       onPress={onPress}
     >
-      <Animated.View style={[styles.bookItem, { transform: [{ scale }] }]}>
-        <Image source={{ uri: book.cover }} style={styles.coverImage} />
-        <View style={styles.bookInfo}>
-          <Text style={styles.title}>{book.title}</Text>
-          <Text style={styles.author}>Auteur: {book.author}</Text>
-          <Text style={styles.year}>Année: {book.year}</Text>
+      <Animated.View style={[styles.itemItem, { transform: [{ scale }] }]}>
+        <Image source={{ uri: item.cover }} style={styles.coverImage} />
+        <View style={styles.itemInfo}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.author}>Auteur: {item.author}</Text>
+          <Text style={styles.year}>Année: {item.year}</Text>
         </View>
         <Ionicons name="chevron-forward" size={24} color="#888" />
       </Animated.View>
@@ -49,21 +49,21 @@ const BookItem = ({ book, onPress }) => {
 };
 
 const HomeScreen = ({ navigation }) => {
-  const { books } = useContext(BooksContext);
+  const { items } = useContext(ItemsContext);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={books}
+        data={items}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <BookItem
-            book={item}
-            onPress={() => navigation.navigate("DetailLivre", { book: item })}
+          <ItemItem
+            item={item}
+            onPress={() => navigation.navigate("DetailLivre", { item: item })}
           />
         )}
       />
-      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddBook')}>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddItem')}>
         <Ionicons name="add-circle" size={28} color="white" />
         <Text style={styles.addButtonText}>Ajouter un Livre</Text>
       </TouchableOpacity>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#f8f9fa",
   },
-  bookItem: {
+  itemItem: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 15,
   },
-  bookInfo: {
+  itemInfo: {
     flex: 1,
   },
   title: {

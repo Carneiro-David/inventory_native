@@ -5,13 +5,13 @@ import HomeScreen from './screens/HomeScreen';
 import AddBookScreen from './screens/AddBookScreen';
 import DetailLivre from './screens/DetailLivre';
 import EditBookScreen from './screens/EditBookScreen';
-import { BooksProvider } from './BooksContext';
+import { ItemsProvider } from './ItemsContext';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <BooksProvider>
+    <ItemsProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Accueil des Livres' }} />
@@ -20,7 +20,7 @@ const App = () => {
           <Stack.Screen name="EditBook" component={EditBookScreen} options={{ title: 'Modifier le Livre' }} />
         </Stack.Navigator>
       </NavigationContainer>
-    </BooksProvider>
+    </ItemsProvider>
   );
 };
 
