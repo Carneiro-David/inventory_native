@@ -7,6 +7,7 @@ import HomeScreen from "./screens/HomeScreen";
 import AddItemScreen from "./screens/AddItemScreen";
 import DetailItem from "./screens/DetailItem";
 import EditItemScreen from "./screens/EditItemScreen";
+import CalendarScreen from "./screens/CalendarScreen";
 import { ItemsProvider } from "./ItemsContext";
 
 const Stack = createStackNavigator();
