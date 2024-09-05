@@ -9,6 +9,7 @@ import DetailItem from "./screens/DetailItem";
 import EditItemScreen from "./screens/EditItemScreen";
 import CalendarScreen from "./screens/CalendarScreen";
 import { ItemsProvider } from "./ItemsContext";
+import ValidateCalendar from "./screens/ValidateCalendar";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +64,16 @@ function App() {
               tabBarLabel: "Planning",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="calendar-outline" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Evènement"
+            component={ValidateCalendar}
+            options={{
+              tabBarLabel: "Evènement",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="checkmark-done" size={size} color={color} />
               ),
             }}
           />

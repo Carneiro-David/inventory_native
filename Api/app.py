@@ -52,6 +52,26 @@ items = [
     }
 ]
 
+events = [
+    {
+        "id": 1,
+        "entreprise": "Entreprise A",
+        "startDate": "2023-09-01",
+        "endDate": "2023-09-03",
+        "selectedItem": {
+            "name": "Jambon de Paris",
+            "quantity": "100"
+        }
+    },
+    {
+        "id": 2,
+        "entreprise": "Entreprise B",
+        "startDate": "2023-09-05",
+        "endDate": "2023-09-07",
+    }
+]
+
+
 # Récupérer tous les items
 @app.route("/items", methods=["GET"])
 def get_items():
@@ -110,6 +130,29 @@ def delete_item(item_id):
     items.remove(item)
 
     return jsonify({"message": "Item supprimé"})
+
+    # Récupérer tous les items
+
+@app.route("/events", methods=["GET"])
+def get_events():
+    return jsonify(events)
+
+
+@app.route("/events", methods=["POST"])
+def add_event():
+    new_event = request.json
+    new_event["id"] = len(events) + 1 
+    events.append(new_event)
+    return jsonify(new_event), 201
+
+
+@app.route("/events/<int:event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    event = next((event for event in events if event["id"] == event_id), None)
+    if event is None:
+        return jsonify({"message": "Événement non trouvé"}), 404
+    events.remove(event)
+    return jsonify({"message": "Événement supprimé"})
 
 
 if __name__ == "__main__":
