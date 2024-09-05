@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ItemsContext } from '../ItemsContext';
 import { Picker } from '@react-native-picker/picker';
+import moment from 'moment';
 
 const CalendarScreen = () => {
   const { items } = useContext(ItemsContext);
@@ -15,6 +16,26 @@ const CalendarScreen = () => {
   const [events, setEvents] = useState({});
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
+
+  // Fonction pour obtenir toutes les dates entre la date de début et la date de fin
+  const getDatesInRange = (start, end) => {
+    let dates = {};
+    let currentDate = moment(start);
+    const endDate = moment(end);
+
+    while (currentDate <= endDate) {
+      const dateString = currentDate.format('YYYY-MM-DD');
+      dates[dateString] = {
+        selected: true,
+        marked: true,
+        color: 'lightblue',
+        textColor: 'black',
+      };
+      currentDate = currentDate.add(1, 'days');
+    }
+    return dates;
+  };
 
   const handleAddEvent = () => {
     if (!selectedItemId || !entreprise || !startDate || !endDate) {
@@ -22,39 +43,41 @@ const CalendarScreen = () => {
       return;
     }
 
-    const newEvent = {
-      idItem: selectedItemId,
-      entreprise,
-      startDate: startDate.toISOString().split('T')[0],
-      endDate: endDate.toISOString().split('T')[0],
-    };
+    const start = startDate.toISOString().split('T')[0];
+    const end = endDate.toISOString().split('T')[0];
+
+    // Obtenir toutes les dates entre startDate et endDate et les ajouter aux événements
+    const newEvents = getDatesInRange(start, end);
 
     setEvents({
       ...events,
-      [newEvent.startDate]: {
-        marked: true,
-        events: [...(events[newEvent.startDate]?.events || []), newEvent],
-      },
-      [newEvent.endDate]: {
-        marked: true,
-        events: [...(events[newEvent.endDate]?.events || []), newEvent],
-      },
+      ...newEvents, // Marquer toutes les dates entre start et end
     });
 
     setSelectedItemId('');
     setEntreprise('');
     setStartDate(null);
     setEndDate(null);
+    setSuccessMessage(true); // Affiche le message de validation
+
+    // Réinitialiser le calendrier et masquer le message après 15 secondes
+    setTimeout(() => {
+      setEvents({});
+      setSuccessMessage(false); // Masquer le message après 15 secondes
+    }, 15000);
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Calendar
-        markedDates={Object.keys(events).reduce((acc, date) => {
-          acc[date] = { marked: true };
-          return acc;
-        }, {})}
+        markedDates={events}
       />
+
+      {successMessage && (
+        <View style={styles.successMessage}>
+          <Text style={styles.successText}>Événement ajouté avec succès !</Text>
+        </View>
+      )}
 
       <Text style={styles.label}>Sélectionnez un item</Text>
       <Picker
@@ -64,7 +87,7 @@ const CalendarScreen = () => {
       >
         <Picker.Item label="Sélectionner un item" value="" />
         {items.map((item) => (
-          <Picker.Item key={item.id} label={item.title} value={item.id} />
+          <Picker.Item key={item.id} label={item.name} value={item.id} />
         ))}
       </Picker>
 
@@ -112,13 +135,13 @@ const CalendarScreen = () => {
       <View style={styles.addButtonContainer}>
         <Button title="Ajouter l'événement" onPress={handleAddEvent} color="green" />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
   },
   label: {
@@ -140,6 +163,17 @@ const styles = StyleSheet.create({
   },
   addButtonContainer: {
     marginTop: 20,
+  },
+  successMessage: {
+    marginVertical: 20,
+    padding: 10,
+    backgroundColor: '#d4edda',
+    borderRadius: 5,
+  },
+  successText: {
+    color: '#155724',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
