@@ -17,6 +17,7 @@ const generateRandomColor = () => {
 };
 
 const CalendarScreen = () => {
+  // Récupérer les items depuis le contexte
   const { items } = useContext(ItemsContext);
 
   const [selectedItemId, setSelectedItemId] = useState('');
@@ -28,12 +29,13 @@ const CalendarScreen = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  // Fonction pour obtenir les dates dans une plage donnée et leur attribuer une couleur
+  // Fonction pour obtenir les dates dans une fourchette donnée et leur attribuer une couleur aléatoire
   const getDatesInRange = (start, end, color) => {
     let dates = {};
     let currentDate = moment(start);
     const endDate = moment(end);
 
+    // Ajout des couleurs pour chaque jour avec événements dans le calendrier
     while (currentDate <= endDate) {
       const dateString = currentDate.format('YYYY-MM-DD');
       dates[dateString] = {
@@ -48,6 +50,7 @@ const CalendarScreen = () => {
       return dates;
     };
 
+  // Gérer l'ajout un nouvel événement
   const handleAddEvent = async () => {
     if (!selectedItemId || !entreprise || !startDate || !endDate) {
       Alert.alert('Erreur', 'Tous les champs doivent être remplis');
@@ -67,6 +70,7 @@ const CalendarScreen = () => {
     };
 
     try {
+      // Enregister l'événement via l'API
       const response = await fetch('http://10.0.2.2:5000/events', {
         method: 'POST',
         headers: {
@@ -87,6 +91,7 @@ const CalendarScreen = () => {
         ...newEvents,
       });
 
+      // Clear des champs après save
       setSelectedItemId('');
       setEntreprise('');
       setStartDate(null);
@@ -102,7 +107,7 @@ const CalendarScreen = () => {
     }
   };
 
-  // Chargement des événements existants
+  // Chargement des événements existants depuis l'API
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -110,6 +115,7 @@ const CalendarScreen = () => {
         const data = await response.json();
 
         let fetchedEvents = {};
+        // Ajouter chaque événement au calendrier avec une couleur unique
         data.forEach(event => {
           const eventColor = generateRandomColor();
           const eventDates = getDatesInRange(event.startDate, event.endDate, eventColor);
