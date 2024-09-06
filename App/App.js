@@ -68,10 +68,10 @@ function App() {
             }}
           />
           <Tab.Screen
-            name="Evènement"
+            name="Évènements"
             component={ValidateCalendar}
             options={{
-              tabBarLabel: "Evènement",
+              tabBarLabel: "Évènements",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="checkmark-done" size={size} color={color} />
               ),

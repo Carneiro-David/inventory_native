@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -6,10 +6,20 @@ import { ItemsContext } from '../ItemsContext';
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
 
+// Fonction pour générer une couleur aléatoire
+const generateRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
 const CalendarScreen = () => {
   const { items } = useContext(ItemsContext);
 
-  const [selectedItemId, setSelectedItemId] = useState(''); 
+  const [selectedItemId, setSelectedItemId] = useState('');
   const [entreprise, setEntreprise] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -18,7 +28,8 @@ const CalendarScreen = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  const getDatesInRange = (start, end) => {
+  // Fonction pour obtenir les dates dans une plage donnée et leur attribuer une couleur
+  const getDatesInRange = (start, end, color) => {
     let dates = {};
     let currentDate = moment(start);
     const endDate = moment(end);
@@ -28,13 +39,14 @@ const CalendarScreen = () => {
       dates[dateString] = {
         selected: true,
         marked: true,
-        color: 'lightblue',
-        textColor: 'black',
-      };
-      currentDate = currentDate.add(1, 'days');
-    }
-    return dates;
-  };
+        selectedColor: color,
+        dotColor: color,
+        textColor: 'white',
+        };
+        currentDate = currentDate.add(1, 'days');
+      }
+      return dates;
+    };
 
   const handleAddEvent = async () => {
     if (!selectedItemId || !entreprise || !startDate || !endDate) {
@@ -44,12 +56,14 @@ const CalendarScreen = () => {
 
     const start = startDate.toISOString().split('T')[0];
     const end = endDate.toISOString().split('T')[0];
+    const eventColor = generateRandomColor();
 
     const newEvent = {
       itemId: selectedItemId,
       entreprise: entreprise,
       startDate: start,
       endDate: end,
+      color: eventColor,
     };
 
     try {
@@ -67,7 +81,7 @@ const CalendarScreen = () => {
 
       const eventData = await response.json();
 
-      const newEvents = getDatesInRange(start, end);
+      const newEvents = getDatesInRange(start, end, eventColor);
       setEvents({
         ...events,
         ...newEvents,
@@ -87,6 +101,28 @@ const CalendarScreen = () => {
       Alert.alert('Erreur', 'Impossible d\'ajouter l\'événement');
     }
   };
+
+  // Chargement des événements existants
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://10.0.2.2:5000/events');
+        const data = await response.json();
+
+        let fetchedEvents = {};
+        data.forEach(event => {
+          const eventColor = generateRandomColor();
+          const eventDates = getDatesInRange(event.startDate, event.endDate, eventColor);
+          fetchedEvents = { ...fetchedEvents, ...eventDates };
+        });
+        setEvents(fetchedEvents);
+      } catch (error) {
+        Alert.alert('Erreur', 'Impossible de récupérer les événements');
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
