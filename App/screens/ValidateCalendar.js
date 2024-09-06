@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
-import { ItemsContext } from '../ItemsContext';  // Importer le contexte des items
+import { ItemsContext } from '../ItemsContext';
 
+// Composant pour afficher un événement individuel 
 const EventItem = ({ event, onDelete, items }) => {
-  // Trouver l'item correspondant à l'itemId dans l'événement
+  
   const selectedItem = items.find(item => item.id === event.itemId);
 
   return (
@@ -30,11 +31,13 @@ const EventItem = ({ event, onDelete, items }) => {
   );
 };
 
+// Composant qui affiche la liste d'event + la suppression d'event
 const ValidateCalendar = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { items } = useContext(ItemsContext);  // Accéder aux items via le contexte
+  const { items } = useContext(ItemsContext);
 
+  // Fonction pour récupérer les event depuis l'API
   const fetchEvents = async () => {
     try {
       const response = await fetch('http://10.0.2.2:5000/events');
@@ -47,6 +50,7 @@ const ValidateCalendar = () => {
     }
   };
 
+  // Fonction pour supprimer un event avec requête DELETE à l'API
   const deleteEvent = async (id) => {
     try {
       const response = await fetch(`http://10.0.2.2:5000/events/${id}`, {
@@ -67,6 +71,7 @@ const ValidateCalendar = () => {
     fetchEvents();
   }, []);
 
+  // Chargement tant que les events ne sont pas ouvert
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -75,6 +80,7 @@ const ValidateCalendar = () => {
     );
   }
 
+  // Affichage des events dans une liste
   return (
     <View style={styles.container}>
       <FlatList
@@ -88,6 +94,7 @@ const ValidateCalendar = () => {
   );
 };
 
+// Style de la page
 const styles = StyleSheet.create({
   container: {
     flex: 1,
