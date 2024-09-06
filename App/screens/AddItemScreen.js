@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { ItemsContext } from '../ItemsContext';
 
@@ -12,6 +12,7 @@ const AddItemScreen = ({ navigation }) => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
 
+  // Sélectionner une image depuis la galerie
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -25,6 +26,7 @@ const AddItemScreen = ({ navigation }) => {
     }
   };
 
+  // Prendre une photo avec la caméra
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
@@ -43,6 +45,7 @@ const AddItemScreen = ({ navigation }) => {
     }
   };
 
+  // Ajouter le produit 
   const handleAddItem = () => {
     const newItem = {
       id: Date.now().toString(),
@@ -59,7 +62,7 @@ const AddItemScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.label}>Nom du produit :</Text>
       <TextInput
         style={styles.input}
@@ -121,14 +124,14 @@ const AddItemScreen = ({ navigation }) => {
       <TouchableOpacity onPress={handleAddItem} style={styles.submitButton}>
         <Text style={styles.submitButtonText}>Ajouter le produit</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    flexGrow: 1,
+    padding: 8,
     backgroundColor: '#2E2E2E', // Gris foncé
   },
   label: {
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   button: {
     backgroundColor: '#900', // Rouge foncé
@@ -162,13 +165,13 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
-    marginBottom: 20,
+    marginBottom: 5,
     borderRadius: 5,
     borderWidth: 2,
     borderColor: '#900', // Rouge foncé
   },
   submitButton: {
-    backgroundColor: '#B22222', // Rouge plus intense
+    backgroundColor: '#B22222', // Rouge
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
