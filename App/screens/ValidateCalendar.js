@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
+import { ItemsContext } from '../ItemsContext';  // Importer le contexte des items
 
-const EventItem = ({ event, onDelete }) => {
+const EventItem = ({ event, onDelete, items }) => {
+  // Trouver l'item correspondant à l'itemId dans l'événement
+  const selectedItem = items.find(item => item.id === event.itemId);
+
   return (
     <View style={styles.eventItem}>
       <View style={styles.eventInfo}>
@@ -11,9 +15,9 @@ const EventItem = ({ event, onDelete }) => {
         <Text style={styles.dates}>
           Du {moment(event.startDate).format('DD/MM/YYYY')} au {moment(event.endDate).format('DD/MM/YYYY')}
         </Text>
-        {event.selectedItem ? (
+        {selectedItem ? (
           <Text style={styles.selectedItem}>
-            Item sélectionné: {event.selectedItem.name} (Quantité: {event.selectedItem.quantity})
+            Item sélectionné: {selectedItem.name} (Quantité: {selectedItem.quantity})
           </Text>
         ) : (
           <Text style={styles.noItem}>Aucun item sélectionné</Text>
@@ -29,12 +33,13 @@ const EventItem = ({ event, onDelete }) => {
 const ValidateCalendar = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { items } = useContext(ItemsContext);  // Accéder aux items via le contexte
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/events'); 
+      const response = await fetch('http://10.0.2.2:5000/events');
       const data = await response.json();
-      setEvents(data); 
+      setEvents(data);
       setLoading(false);
     } catch (error) {
       Alert.alert('Erreur', 'Impossible de récupérer les événements');
@@ -76,7 +81,7 @@ const ValidateCalendar = () => {
         data={events}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <EventItem event={item} onDelete={deleteEvent} />
+          <EventItem event={item} onDelete={deleteEvent} items={items} />
         )}
       />
     </View>
