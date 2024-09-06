@@ -37,7 +37,7 @@ const Item = ({ item, onPress }) => {
       onPress={onPress}
     >
       <Animated.View style={[styles.Item, { transform: [{ scale }] }]}>
-        <Image source={{ uri: item.cover }} style={styles.coverImage} />
+        <Image source={{ uri: item.image }} style={styles.coverImage} />
         <View style={styles.itemInfo}>
           <Text style={styles.name}>{item.name}</Text>
           <Text style={styles.quantity}>Quantité: {item.quantity}</Text>
