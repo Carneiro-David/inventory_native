@@ -6,6 +6,7 @@ const DetailItem = ({ route, navigation }) => {
   const { item } = route.params;
   const { deleteItem } = useContext(ItemsContext);
 
+  // Fonction appelée lorsqu'on veut supprimer un item
   const handleDelete = () => {
     Alert.alert(
       "Confirmer la suppression",
@@ -27,6 +28,7 @@ const DetailItem = ({ route, navigation }) => {
     );
   };
 
+  // Visuel de la page 
   return (
     <View style={styles.container}>
       <Image source={{ uri: item.image }} style={styles.itemImage} />
@@ -44,12 +46,13 @@ const DetailItem = ({ route, navigation }) => {
       <Button
         title="Supprimer l'Item"
         onPress={handleDelete}
-        color="red" // Optionnel, pour rendre le bouton rouge
+        color="red"
       />
     </View>
   );
 };
 
+// Style de la page 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
